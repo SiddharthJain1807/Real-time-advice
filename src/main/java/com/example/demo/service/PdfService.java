@@ -19,6 +19,7 @@ import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfPageEventHelper;
 import com.itextpdf.text.pdf.PdfWriter;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -30,9 +31,9 @@ public class PdfService {
 	float dr=0;
 	float cr=0;
 	
-
 	
-	public ByteArrayOutputStream createPDF(JSONObject data) throws IOException, DocumentException {
+	
+	public ByteArrayInputStream createPDF(JSONObject data) throws IOException, DocumentException {
 		
 		
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -53,7 +54,7 @@ public class PdfService {
 	        
 	        float fontSize = 9f;
 		    Font boldFont = new Font(FontFamily.COURIER,fontSize);
-		     
+		    
 	        Paragraph paragraph = new Paragraph("RBL Bank",boldFont);
             paragraph.setAlignment(Element.ALIGN_CENTER);
             document.add(paragraph);
@@ -68,15 +69,15 @@ public class PdfService {
            paragraph.setAlignment(Element.ALIGN_LEFT);
            document.add(paragraph);
 	        
-           paragraph = new Paragraph("Place : "+jsonObject.getString("brAddress1"),boldFont);
+           paragraph = new Paragraph("Place : "+jsonObject.getString("brAddr1"),boldFont);
            paragraph.setAlignment(Element.ALIGN_LEFT);
            document.add(paragraph);
            
-           paragraph = new Paragraph(jsonObject.getString("brAddress2"),boldFont);
+           paragraph = new Paragraph(jsonObject.getString("brAddr2"),boldFont);
            paragraph.setAlignment(Element.ALIGN_LEFT);
            document.add(paragraph);
            
-           paragraph = new Paragraph(jsonObject.getString("brAddress3"),boldFont);
+           paragraph = new Paragraph(jsonObject.getString("brAddr3"),boldFont);
            paragraph.setAlignment(Element.ALIGN_LEFT);
            document.add(paragraph);
            
@@ -126,7 +127,7 @@ public class PdfService {
            }
                
    
-               paragraph = new Paragraph("Dated: "+(jsonObject.getString("lodgeDate")),boldFont);
+               paragraph = new Paragraph("Dated: "+(jsonObject.getString("lodgDate")),boldFont);
                paragraph.setAlignment(Element.ALIGN_RIGHT);
                document.add(paragraph);
                
@@ -138,18 +139,18 @@ public class PdfService {
                paragraph.setAlignment(Element.ALIGN_LEFT);
                document.add(paragraph);
    	        
-               paragraph = new Paragraph("Address : "+jsonObject.getString("otherPartyAddress1"),boldFont);
+               paragraph = new Paragraph("Address : "+jsonObject.getString("otherPartyAddr1"),boldFont);
                paragraph.setAlignment(Element.ALIGN_LEFT);
                document.add(paragraph);
                
-               if(jsonObject.has("otherPartyAddress2")) {
-               	 paragraph = new Paragraph(jsonObject.getString("otherPartyAddress2"),boldFont);
+               if(jsonObject.has("otherPartyAddr2")) {
+               	 paragraph = new Paragraph(jsonObject.getString("otherPartyAddr2"),boldFont);
                     paragraph.setAlignment(Element.ALIGN_LEFT);
                     document.add(paragraph);
                }
                
-               if(jsonObject.has("otherPartyAddress3")) {
-                    paragraph = new Paragraph(jsonObject.getString("otherPartyAddress3"),boldFont);
+               if(jsonObject.has("otherPartyAddr3")) {
+                    paragraph = new Paragraph(jsonObject.getString("otherPartyAddr3"),boldFont);
                     paragraph.setAlignment(Element.ALIGN_LEFT);
                     document.add(paragraph);
                }
@@ -175,7 +176,7 @@ public class PdfService {
                paragraph.setAlignment(Element.ALIGN_LEFT);
                document.add(paragraph);
                
-               paragraph = new Paragraph("Our Reference Number : "+jsonObject.getString("collectionId"),boldFont);
+               paragraph = new Paragraph("Our Reference Number : "+jsonObject.getString("collectionID"),boldFont);
                paragraph.setAlignment(Element.ALIGN_LEFT);
                document.add(paragraph);
 
@@ -191,18 +192,18 @@ public class PdfService {
                paragraph.setAlignment(Element.ALIGN_LEFT);
                document.add(paragraph);
    	        
-               paragraph = new Paragraph("Address : "+jsonObject.getString("partyAddress1"),boldFont);
+               paragraph = new Paragraph("Address : "+jsonObject.getString("partyAddr1"),boldFont);
                paragraph.setAlignment(Element.ALIGN_LEFT);
                document.add(paragraph);
                
-               if(jsonObject.has("partyAddress2")) {
-               	 paragraph = new Paragraph(jsonObject.getString("partyAddress2"),boldFont);
+               if(jsonObject.has("partyAddr2")) {
+               	 paragraph = new Paragraph(jsonObject.getString("partyAddr2"),boldFont);
                     paragraph.setAlignment(Element.ALIGN_LEFT);
                     document.add(paragraph);
                }
                
-               if(jsonObject.has("partyAddress3")) {
-                    paragraph = new Paragraph(jsonObject.getString("partyAddress3"),boldFont);
+               if(jsonObject.has("partyAddr3")) {
+                    paragraph = new Paragraph(jsonObject.getString("otherPartyAddr3"),boldFont);
                     paragraph.setAlignment(Element.ALIGN_LEFT);
                     document.add(paragraph);
                }
@@ -223,7 +224,7 @@ public class PdfService {
                paragraph.setAlignment(Element.ALIGN_LEFT);
                document.add(paragraph);
                
-               paragraph = new Paragraph("Purpose Code : "+jsonObject.getString("purposeCode")+" - "+jsonObject.getString("purposeDescription"),boldFont);
+               paragraph = new Paragraph("Purpose Code : "+jsonObject.getString("purposeCode")+" - "+jsonObject.getString("purposeCodeDesc"),boldFont);
                paragraph.setAlignment(Element.ALIGN_LEFT);
                document.add(paragraph);
            
@@ -273,7 +274,7 @@ public class PdfService {
 		       
                if(jsonObject.getString("inOutInd").equals("O")) {
                	
-               	ltable.addCell(new Paragraph("Amount Debited to Your Account : "+jsonObject.getString("operateAccount"),boldFont));
+               	ltable.addCell(new Paragraph("Amount Debited to Your Account : "+jsonObject.getString("operAcct"),boldFont));
                	ltable.addCell(new Paragraph("",boldFont));
                	ltable.addCell(new Paragraph("INR",boldFont));
                	DecimalFormat decimalFormat = new DecimalFormat("0.########");
@@ -282,13 +283,13 @@ public class PdfService {
                }
                else {
                	
-               	ltable.addCell(new Paragraph("Amount Credited to Your Account : "+jsonObject.getString("operateAccount"),boldFont));
+               	ltable.addCell(new Paragraph("Amount Credited to Your Account : "+jsonObject.getString("operAcct"),boldFont));
                	ltable.addCell(new Paragraph("",boldFont));
                	ltable.addCell(new Paragraph("INR",boldFont));
                	DecimalFormat decimalFormat = new DecimalFormat("0.########");
                	ltable.addCell(new Paragraph(decimalFormat.format(dr),boldFont));
                	
-               	ltable.addCell(new Paragraph("Amount Debited to Your Account : "+jsonObject.getString("operateAccount"),boldFont));
+               	ltable.addCell(new Paragraph("Amount Debited to Your Account : "+jsonObject.getString("operAcct"),boldFont));
                	ltable.addCell(new Paragraph("",boldFont));
                	ltable.addCell(new Paragraph("INR",boldFont));
                	decimalFormat = new DecimalFormat("0.########");
@@ -310,8 +311,6 @@ public class PdfService {
 	    document.add(Chunk.NEWLINE);
 	    document.add(Chunk.NEWLINE);
 	    document.add(Chunk.NEWLINE);
-	    document.add(Chunk.NEWLINE);
-	    document.add(Chunk.NEWLINE);
         
         paragraph = new Paragraph("THIS DOCUMENT SHOULD NOT BE CONSIDERED AS AN INVOICE AS PER GST ACT.",boldFont);
         paragraph.setAlignment(Element.ALIGN_CENTER);
@@ -325,7 +324,7 @@ public class PdfService {
 
     
             
-	        return baos;
+	        return new ByteArrayInputStream(baos.toByteArray());
     }
 	
 	
@@ -372,7 +371,7 @@ public class PdfService {
     			table.addCell(new Paragraph(jsonObject.getString("remarks"),boldFont));
     			
     			table.addCell(new Paragraph(String.valueOf(json.getFloat("rate")),boldFont));
-    			table.addCell(new Paragraph(jsonObject.getString("currenyCode"),boldFont));
+    			table.addCell(new Paragraph(jsonObject.getString("currencyCode"),boldFont));
     			
     			DecimalFormat decimalFormat = new DecimalFormat("0.########");
     			table.addCell(new Paragraph(decimalFormat.format(jsonObject.getFloat("amount")),boldFont));
@@ -400,7 +399,7 @@ public class PdfService {
     			table.addCell(new Paragraph(jsonObject.getString("remarks"),boldFont));
     			
     			table.addCell(new Paragraph("",boldFont));
-    			table.addCell(new Paragraph(jsonObject.getString("currenyCode"),boldFont));
+    			table.addCell(new Paragraph(jsonObject.getString("currencyCode"),boldFont));
     			
     			DecimalFormat decimalFormat = new DecimalFormat("0.########");
     			table.addCell(new Paragraph(decimalFormat.format(jsonObject.getFloat("amount")),boldFont));

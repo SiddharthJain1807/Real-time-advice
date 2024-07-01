@@ -1,8 +1,14 @@
 package com.example.demo.controller;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -10,45 +16,34 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.service.PdfService;
 import com.example.demo.service.TransactionService;
 import com.itextpdf.text.DocumentException;
 
-import java.io.IOException;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
-
-import org.springframework.web.bind.annotation.RestController;
-@RestController
+@Controller
+@RequestMapping("/pdf")
 public class PdfController {
-	
-	@GetMapping("/about")
-	public String getAbout() {
-		String str = "hello world";
-		return str;
-	}
+
     @Autowired
     PdfService pdfService;
 
     @Autowired
     TransactionService transactionService;
-    
+
     @GetMapping("/createPdf/{collectionId}")
-    public ResponseEntity<byte[]> getPdf(@PathVariable String collectionId) throws IOException, DocumentException {
-        JSONObject data = transactionService.generateResponse(collectionId);
-        ByteArrayOutputStream pdfStream = pdfService.createPDF(data);
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_PDF);
-        headers.setContentDispositionFormData("attachment", "generated.pdf");
-
-        return ResponseEntity
-                .ok()
-                .headers(headers)
-                .body(pdfStream.toByteArray());
+    public ResponseEntity<InputStreamResource> getPdf(@PathVariable String collectionId) throws IOException, DocumentException {
+    		
+    		JSONObject data = transactionService.generateResponse(collectionId);
+    		ByteArrayInputStream pdf = pdfService.createPDF(data);
+    		
+    		HttpHeaders httpHeaders  = new HttpHeaders();
+    		httpHeaders.add("Content-Disposition", "inLine; filename= kyzer.pdf");
+    		return ResponseEntity.ok()
+    				.headers(httpHeaders)
+    				.contentType(MediaType.APPLICATION_PDF)
+    				.body(new InputStreamResource(pdf)); 
+    		
     }
-
-    
 }

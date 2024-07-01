@@ -10,8 +10,8 @@ import com.itextpdf.text.pdf.PdfWriter;
 
 class HeaderFooterHandler extends PdfPageEventHelper {
 
-    private static final String HEADER_IMAGE_PATH = "C:\\Users\\Somil\\Desktop\\RBL Bank\\header.jpg";
-    private static final String FOOTER_IMAGE_PATH = "C:\\Users\\Somil\\Desktop\\RBL Bank\\footer.jpg";
+    private static final String HEADER_IMAGE_PATH = "C:\\Users\\jains\\Desktop\\headerFooter\\header.jpg";
+    private static final String FOOTER_IMAGE_PATH = "C:\\Users\\jains\\Desktop\\headerFooter\\footer.jpg";
    
     @Override
     public void onEndPage(PdfWriter writer, Document document) {
